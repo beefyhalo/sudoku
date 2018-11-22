@@ -36,8 +36,5 @@ choices (Filled x) = [Filled x]
 allChoices : Grid n -> List (Grid n)
 allChoices (MkGrid xs) = map MkGrid $ traverse (traverse choices) xs
 
-generateCases : Grid n -> (List (g' : Grid n ** Valid g'))
-generateCases = filterValid . allChoices
-
 solveSudoku : (g : Grid n) -> List (g' : (Grid n) ** solved : Valid g' ** Solved g')
-solveSudoku = filterSolved . generateCases
+solveSudoku = filterSolved . filterValid . allChoices
