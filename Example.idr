@@ -31,15 +31,29 @@ singleEmpty2 = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
                           [Filled 3, Filled 0, Filled 1, Filled 2]]
 
 
-fewEmpty : Grid 4
-fewEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
+threeEmpty : Grid 4
+threeEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
                          [[Filled 0, Filled 1, Filled 2, Filled 3],
                           [Filled 2, Filled 3, Filled 0, Empty],
                           [Filled 1, Empty, Filled 3, Filled 0],
                           [Empty, Filled 0, Filled 1, Filled 2]]
 
-someEmpty : Grid 4
-someEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
+fourEmpty : Grid 4
+fourEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
+                      [[Empty, Filled 1, Filled 2, Filled 3],
+                      [Filled 2, Empty, Empty, Filled 1],
+                      [Filled 1, Filled 2, Empty, Filled 0],
+                      [Filled 3, Filled 0, Filled 1, Filled 2]]
+
+fiveEmpty : Grid 4
+fiveEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
+                      [[Filled 0, Empty, Empty, Filled 3],
+                      [Filled 2, Filled 3, Filled 0, Empty],
+                      [Filled 1, Filled 2, Empty, Filled 0],
+                      [Empty, Filled 0, Filled 1, Filled 2]]
+
+sixEmpty : Grid 4
+sixEmpty = MkGrid $ the (Vect (2*2) $ Vect (2*2) (Value (2*2))) $
                          [[Filled 0, Filled 1, Filled 2, Filled 3],
                           [Filled 2, Empty, Filled 0, Empty],
                           [Filled 1, Empty, Empty, Empty],
