@@ -8,13 +8,11 @@ import Solved
 %default total
 %access public export
 
-
 filterValid : List (Grid n) -> List (g : (Grid n) ** Valid g)
 filterValid [] = []
 filterValid (g :: xs) with (decValid g)
   | Yes prf = (g ** prf) :: filterValid xs
   | No _    = filterValid xs
-
 
 filterSolved : (List (g : Grid n ** Valid g)) -> List (g : Grid n ** solved : Valid g ** Solved g)
 filterSolved [] = []
@@ -31,17 +29,15 @@ setOfFin {n} = setOfFin' n
                                Just fin => fin :: setOfFin' k
                                Nothing => []
                                
-guess : Value n -> List (Value n)
-guess Empty {n}  = map Filled setOfFin
-guess (Filled x) = [Filled x]
+choices : Value n -> List (Value n)
+choices Empty {n}  = map Filled setOfFin
+choices (Filled x) = [Filled x]
 
-
-allGuesses : Grid n -> List (Grid n)
-allGuesses x = ?allGuesses_rhs
-
+allChoices : Grid n -> List (Grid n)
+allChoices (MkGrid xs) = map MkGrid $ traverse (traverse choices) xs
 
 generateCases : Grid n -> (List (g' : Grid n ** Valid g'))
-generateCases (MkGrid xs) = filterValid ?generateCases_rhs_1
+generateCases = filterValid . allChoices
 
 solveSudoku : (g : Grid n) -> List (g' : (Grid n) ** solved : Valid g' ** Solved g')
 solveSudoku = filterSolved . generateCases
