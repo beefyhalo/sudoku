@@ -18,6 +18,12 @@ Uninhabited (Filled _ = Empty) where
 negCong : (contra : (x = y) -> Void) -> (Filled x = Filled y) -> Void
 negCong contra Refl = contra Refl
 
+Eq (Value n) where
+  Empty == Empty = True
+  Empty == (Filled x) = False
+  (Filled x) == Empty = False
+  (Filled x) == (Filled y) = x == y
+
 DecEq (Value n) where
   decEq Empty Empty = Yes Refl
   decEq Empty (Filled x) = No uninhabited
