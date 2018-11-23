@@ -7,9 +7,9 @@ import Valid
 %default total
 %access public export
 
-data RowIsFilled : Vect n a -> Type where
+data RowIsFilled : Vect n (Value m) -> Type where
   EmptyRow : RowIsFilled []
-  FilledRow : (prf: Not (Elem x xs)) -> (induction: RowIsFilled xs) -> RowIsFilled (x :: xs)
+  FilledRow : (induction: RowIsFilled xs) -> RowIsFilled ((Filled x) :: xs)
 
 data RowsAreFilled : Vect n (Vect m a) -> Type where
   EmptyRows : RowsAreFilled []
@@ -18,19 +18,18 @@ data RowsAreFilled : Vect n (Vect m a) -> Type where
 data Solved :  (g : Grid n) -> Type where
   SolvedGrid : (valid : Valid (MkGrid xs)) -> (prf : RowsAreFilled xs) -> Solved (MkGrid xs)
   
-badRow : (contra : Elem x xs) -> RowIsFilled (x :: xs) -> Void
-badRow contra (FilledRow prf induction) = prf contra
+Uninhabited (RowIsFilled (Empty :: xs)) where
+  uninhabited _ impossible
 
 badRowCons : (contra : RowIsFilled xs -> Void) -> RowIsFilled (x :: xs) -> Void
-badRowCons contra (FilledRow prf induction) = contra induction
+badRowCons contra (FilledRow induction) = contra induction
 
-decRowIsFilled : DecEq a => (v : Vect n a) -> Dec (RowIsFilled v)
+decRowIsFilled : (v : Vect n (Value m)) -> Dec (RowIsFilled v)
 decRowIsFilled [] = Yes EmptyRow
-decRowIsFilled (x :: xs) with (decRowIsFilled xs)
-  | No contra = No (badRowCons contra) 
-  | Yes induction with (isElem x xs)
-    | Yes prf   = No (badRow prf)
-    | No contra = Yes (FilledRow contra induction)
+decRowIsFilled (Empty :: xs) = No uninhabited
+decRowIsFilled ((Filled x) :: xs) with (decRowIsFilled xs)
+  | Yes prf = Yes (FilledRow prf)
+  | No contra = No (badRowCons contra)
   
 badRows : (contra : RowIsFilled x -> Void) -> RowsAreFilled (x :: xs) -> Void
 badRows contra (FilledRows prf induction) = contra prf
@@ -38,7 +37,7 @@ badRows contra (FilledRows prf induction) = contra prf
 badRowsCons : (contra : RowsAreFilled xs -> Void) -> RowsAreFilled (x :: xs) -> Void
 badRowsCons contra (FilledRows prf induction) = contra induction
 
-decRowsAreFilled : DecEq a => (xs : Vect n (Vect m a)) -> Dec (RowsAreFilled xs)
+decRowsAreFilled : (xs : Vect n (Vect m (Value k))) -> Dec (RowsAreFilled xs)
 decRowsAreFilled [] = Yes EmptyRows
 decRowsAreFilled (x :: xs) with (decRowsAreFilled xs)
   | No contra = No (badRowsCons contra)
