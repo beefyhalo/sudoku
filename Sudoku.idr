@@ -65,3 +65,14 @@ solveSudoku = filterSolved . filterValid . allChoices
 
 solveSudokuFast : (g : Grid n) -> List (g' : (Grid n) ** solved : Valid g' ** Solved g')
 solveSudokuFast = filterSolved . filterValid . allChoicesPruned
+
+-- throw away the proofs
+
+filterSolved' : (List (g : Grid n ** Valid g)) -> List (Grid n)
+filterSolved' [] = []
+filterSolved' ((g ** valid) :: xs) with (decSolved g)
+  | Yes prf = g :: filterSolved' xs
+  | No _    = filterSolved' xs
+
+solveSudoku' : (g : Grid n) -> List (Grid n)
+solveSudoku' = filterSolved' . filterValid . allChoicesPruned
